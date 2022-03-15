@@ -9,7 +9,7 @@ Simple Episode Searching Application Based on Characters.
 ### Installing
 
 Go to root project where we have package.json located
-Run the below commands
+and Run the below commands :
 
 1. npm install
 2. npm run build
