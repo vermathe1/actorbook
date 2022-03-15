@@ -99,3 +99,10 @@ export const CharacterShowContainer = styled.div`
   padding: 6px 8px;
   align-items: center;
 `
+export const WarningMessage = styled.span`
+  color: #a1a1a1;
+  font-size: 14px;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+`

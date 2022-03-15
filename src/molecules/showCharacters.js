@@ -18,7 +18,7 @@ const Species = styled.span`
 `
 
 export function ShowCharacters(props) {
-  const { image, name, species } = props
+  const { image, name, species, id } = props
 
   return (
     <CharacterShowContainer>

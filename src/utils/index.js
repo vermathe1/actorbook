@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 import { useState } from 'react'
+import config from '../config/url'
+import { makeApiCall } from './httpClient'
 
 export function useDebounce(value, timeout = 500, callback) {
   const [timer, setTimer] = useState(null)
@@ -16,4 +18,48 @@ export function useDebounce(value, timeout = 500, callback) {
       setTimer(newTimer)
     }
   }, [value])
+}
+
+export const preparaAPIQuery = (method, url, data = {}) => ({
+  method,
+  url: encodeURI(url),
+  data,
+})
+
+export const filterbyCategory = (data, type, searchQuery = '') => {
+  return new Promise((resolve, reject) => {
+    let response = []
+    data.results.map((result) => {
+      let searchText = searchQuery ? searchQuery.toLowerCase() : ''
+      let fieldvalue = result[type].toLowerCase()
+      if (fieldvalue.indexOf(searchText) > -1) {
+        let { name, image, id, species } = result
+        response.push({ name, image, id, species })
+      }
+    })
+    resolve(response)
+  })
+}
+
+export const getAllData = async () => {
+  const urlForPages = config.baseUrl + config.characters
+  const options = preparaAPIQuery('GET', urlForPages)
+  try {
+    let res = await makeApiCall(options)
+    let pages = res.info.pages
+    let apiArray = []
+    for (let i = 1; i <= pages; i++) {
+      let url = `${config.baseUrl}${config.characters}?page=${i}`
+      apiArray.push(preparaAPIQuery('GET', url))
+    }
+    return Promise.all(apiArray.map((api) => makeApiCall(api)))
+      .then((res) => {
+        return Promise.resolve(res)
+      })
+      .catch((err) => {
+        console.log('err in Promise.all of autosearch', err)
+      })
+  } catch (err) {
+    console.log('error in initial autosearch api for pages', err)
+  }
 }

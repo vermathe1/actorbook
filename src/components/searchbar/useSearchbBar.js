@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useClickOutside } from 'react-click-outside-hook'
 import { useDebounce } from '../../utils'
+import { filterbyCategory } from '../../utils/index'
 
 export const useSearchbar = () => {
   const [isExpanded, setExpanded] = useState(false)
@@ -9,12 +10,14 @@ export const useSearchbar = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [loading, setLoading] = useState(false)
   const [characters, setCharacters] = useState([])
+  const [noActorsFound, setnoActorsFound] = useState(false)
   const expandContainer = () => {
     setExpanded(true)
   }
   const changeHandler = (e) => {
     e.preventDefault()
     setSearchQuery(e.target.value)
+    if (!e.target.value.length) setnoActorsFound(false)
   }
 
   const collapseContainer = () => {
@@ -23,6 +26,7 @@ export const useSearchbar = () => {
     setSearchQuery('')
     setLoading(false)
     setCharacters([])
+    setnoActorsFound(false)
   }
   useEffect(() => {
     if (isclickedOutfContainer) {
@@ -38,113 +42,37 @@ export const useSearchbar = () => {
     },
   }
   const containerTransition = { type: 'spring', damping: 22, stiffness: 150 }
-  const searchEpisodes = () => {
-    if (!searchQuery || searchQuery.trim() === '') return
 
-    setLoading(true)
-    const response = {
-      data: [
-        {
-          id: 1,
-          name: 'Rick Sanchez',
-          status: 'Alive',
-          species: 'Human',
-          type: '',
-          gender: 'Male',
-          origin: {
-            name: 'Earth (C-137)',
-            url: 'https://rickandmortyapi.com/api/location/1',
-          },
-          image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-          episode: [
-            'https://rickandmortyapi.com/api/episode/1',
-            'https://rickandmortyapi.com/api/episode/2',
-            'https://rickandmortyapi.com/api/episode/3',
-          ],
-        },
-        {
-          id: 2,
-          name: 'Rick Sanchez',
-          status: 'Alive',
-          species: 'Human',
-          type: '',
-          gender: 'Male',
-          origin: {
-            name: 'Earth (C-137)',
-            url: 'https://rickandmortyapi.com/api/location/1',
-          },
-          image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-          episode: [
-            'https://rickandmortyapi.com/api/episode/1',
-            'https://rickandmortyapi.com/api/episode/2',
-            'https://rickandmortyapi.com/api/episode/3',
-          ],
-        },
-        {
-          id: 3,
-          name: 'Rick Sanchez',
-          status: 'Alive',
-          species: 'Human',
-          type: '',
-          gender: 'Male',
-          origin: {
-            name: 'Earth (C-137)',
-            url: 'https://rickandmortyapi.com/api/location/1',
-          },
-          image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-          episode: [
-            'https://rickandmortyapi.com/api/episode/1',
-            'https://rickandmortyapi.com/api/episode/2',
-            'https://rickandmortyapi.com/api/episode/3',
-          ],
-        },
-        {
-          id: 4,
-          name: 'Rick Sanchez',
-          status: 'Alive',
-          species: 'Human',
-          type: '',
-          gender: 'Male',
-          origin: {
-            name: 'Earth (C-137)',
-            url: 'https://rickandmortyapi.com/api/location/1',
-          },
-          image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-          episode: [
-            'https://rickandmortyapi.com/api/episode/1',
-            'https://rickandmortyapi.com/api/episode/2',
-            'https://rickandmortyapi.com/api/episode/3',
-          ],
-        },
-        {
-          id: 5,
-          name: 'Rick Sanchez',
-          status: 'Alive',
-          species: 'Human',
-          type: '',
-          gender: 'Male',
-          origin: {
-            name: 'Earth (C-137)',
-            url: 'https://rickandmortyapi.com/api/location/1',
-          },
-          image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-          episode: [
-            'https://rickandmortyapi.com/api/episode/1',
-            'https://rickandmortyapi.com/api/episode/2',
-            'https://rickandmortyapi.com/api/episode/3',
-          ],
-        },
-      ],
-    }
-
-    if (response) {
-      console.log('Response: ', response.data)
-      setCharacters(response.data)
-    }
-
-    setLoading(false)
+  const showAutoCompleteResult = () => {
+    const data = JSON.parse(window.localStorage.getItem('autosearch'))
+    Promise.all(
+      data.map((actorinfo) => filterbyCategory(actorinfo, 'name', searchQuery))
+    )
+      .then((res) => {
+        setLoading(false)
+        let SearchResponse = res.reduce((acc, data) => {
+          acc = acc.concat(data)
+          return acc
+        }, [])
+        if (!SearchResponse.length) {
+          setnoActorsFound(true)
+        } else {
+          setCharacters(SearchResponse)
+          setnoActorsFound(false)
+        }
+      })
+      .catch((err) => {
+        setLoading(false)
+        console.log('error while filtering in autosearch', err)
+      })
   }
-  useDebounce(searchQuery, 500, searchEpisodes)
+
+  const searchCharacters = async () => {
+    if (!searchQuery || searchQuery.trim() === '') return
+    setLoading(true)
+    showAutoCompleteResult()
+  }
+  useDebounce(searchQuery, 500, searchCharacters)
   return {
     isExpanded,
     inputvariants,
@@ -157,5 +85,6 @@ export const useSearchbar = () => {
     searchQuery,
     loading,
     characters,
+    noActorsFound,
   }
 }

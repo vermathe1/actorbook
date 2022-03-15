@@ -8,6 +8,7 @@ import { StyledInput } from '../../molecules/styledInput'
 import { useSearchbar } from './useSearchbBar'
 import { Loading } from '../../atoms/loading'
 import { ShowCharacters } from '../../molecules/showCharacters'
+import { Message } from '../../atoms/warningmessage'
 
 export const SearchBar = () => {
   const {
@@ -22,6 +23,7 @@ export const SearchBar = () => {
     searchQuery,
     loading,
     characters,
+    noActorsFound,
   } = useSearchbar()
   const isEmpty = !characters || characters.length === 0
   return (
@@ -43,6 +45,10 @@ export const SearchBar = () => {
       {isExpanded && <LineSeperator />}
       <SearchContentContainer>
         {loading && <Loading loading={true} size={20} color="#000" />}
+        {!loading && noActorsFound && <Message>No Actors found!</Message>}
+        {!loading && isEmpty && !noActorsFound && (
+          <Message>Start typing actors name...</Message>
+        )}
         {!isEmpty && !loading && (
           <>
             {characters.map(({ name, species, image, id }) => (
