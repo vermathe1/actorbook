@@ -141,4 +141,5 @@ export const Heading = styled(Name)`
 `
 export const RecommendContainer = styled(EpisodeContainer)`
   background-color: #fdc9c9;
+  height: 100%;
 `
