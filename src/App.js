@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { AppContainer } from './styles'
 import { SearchBar } from './components/searchbar'
-import { getAllData } from './utils/index'
+import { getAllData, getEpisodeListBasedonIds } from './utils/index'
 import { Loading } from './atoms/loading'
 
 const App = () => {
   const initialStorage = () =>
     JSON.parse(window.localStorage.getItem('autosearch')) || []
-  // const episodeListBasedonId = () =>
-  //   JSON.parse(window.localStorage.getItem('episodeList')) || []
+  const episodeListBasedonId = () =>
+    JSON.parse(window.localStorage.getItem('episodeList')) || []
   const [actorsinLocalStorage, setActorsinLocalStorage] =
     useState(initialStorage)
+  const [epsiosdelist, setEpisodeList] = useState(episodeListBasedonId)
   const [loading, setLoading] = useState(true)
-  // const [epsiosdelist, setEpisodeList] = useState(episodeListBasedonId)
 
   const saveCharactersToLocalStorage = () => {
-    console.log('D')
     getAllData()
       .then(setActorsinLocalStorage)
       .catch((err) => console.log('error in App Component', err))
   }
 
-  const saveEpisodesToLocalStorage = () => {}
+  const saveEpisodesToLocalStorage = async () => {
+    setLoading(true)
+    const res = await getEpisodeListBasedonIds(actorsinLocalStorage)
+    // setActorsinLocalStorage(res)
+    // console.log('inside App.js', res)
+  }
   useEffect(() => {
     if (actorsinLocalStorage.length) {
       window.localStorage.setItem(
@@ -29,7 +33,7 @@ const App = () => {
         JSON.stringify(actorsinLocalStorage)
       )
       setLoading(false)
-      // saveEpisodesToLocalStorage(localStorageData)
+      // saveEpisodesToLocalStorage()
     } else {
       saveCharactersToLocalStorage()
     }

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useState } from 'react'
 import config from '../config/url'
-import { makeApiCall } from './httpClient'
+import { makeApiCall, cacheApiCall } from './httpClient'
 
 export function useDebounce(value, timeout = 500, callback) {
   const [timer, setTimer] = useState(null)
@@ -62,4 +62,41 @@ export const getAllData = async () => {
   } catch (err) {
     console.log('error in initial autosearch api for pages', err)
   }
+}
+
+const getepisodesofEachActor = (eachactorObject) => {
+  return Promise.all(
+    eachactorObject.episode.map(async (episodeurl) => {
+      episodeurl = String(episodeurl)
+      let splitStringtoArray = episodeurl.split('/')
+      let episodeId = Number(splitStringtoArray.pop())
+      return {
+        data: await cacheApiCall.cacheCall(
+          {
+            method: 'GET',
+            url: encodeURI(episodeurl),
+          },
+          episodeId
+        ),
+      }
+    })
+  ).then((resArray) => {
+    return Promise.resolve(resArray)
+  })
+}
+const getEpisodes = async (eachpage) => {
+  return Promise.all(eachpage.results.map(getepisodesofEachActor))
+    .then((data) => {
+      eachpage.results.map((page, key) => {
+        page.episode = data[key]
+      })
+      return Promise.resolve(eachpage)
+    })
+    .catch((err) => console.log(err))
+}
+
+export const getEpisodeListBasedonIds = async (params) => {
+  return Promise.all(params.map(getEpisodes))
+    .then((data) => Promise.resolve(data))
+    .catch((err) => console.log('error in getEpisodeListBasedonIds', err))
 }
