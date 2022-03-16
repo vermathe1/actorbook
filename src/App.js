@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { AppContainer, AutoSearchContainer } from './styles'
 import { SearchBar } from './components/searchbar'
 import {
   getAllData,
@@ -8,6 +7,7 @@ import {
 } from './utils/index'
 import { Loading } from './atoms/loading'
 import { Episodes } from './components/episodes'
+import { Recommendataion } from './components/recommendation'
 
 const App = () => {
   const initialStorage = () =>
@@ -45,6 +45,9 @@ const App = () => {
       {loading && <Loading loading={true} size={20} color="#000" />}
       {!loading && <SearchBar onClick={onAutoSearchClick} />}
       {actorInfo && <Episodes info={actorInfo} />}
+      {actorInfo && (
+        <Recommendataion info={actorInfo} onClick={onAutoSearchClick} />
+      )}
     </>
   )
 }

@@ -109,9 +109,14 @@ export const WarningMessage = styled.span`
 export const EpisodeContainer = styled(SearchContentContainer)`
   flex-direction: row;
   flex-wrap: wrap;
+  overflow-y: auto;
+  max-height: 35em;
+  height: 100%;
+  background-color: #e6e7e7;
 `
 export const CardContainer = styled(CharacterShowContainer)`
   flex-direction: column;
+  cursor: pointer;
 `
 export const Name = styled.h3`
   font-size: 15px;
@@ -126,4 +131,11 @@ export const Species = styled.span`
   font-size: 16px;
   display: flex;
   flex: 0.2;
+`
+export const Heading = styled(Name)`
+  display: flex;
+  justify-content: center;
+  text-decoration: underline;
+  font-size: 2em;
+  color: #817d7d;
 `

@@ -47,7 +47,7 @@ export const getDesiredData = (datakey, value) => {
   for (let i = 0; i < localStorageData.length; i++) {
     if (valueFound) break
     for (let j = 0; j < localStorageData[i].results.length; j++) {
-      if (localStorageData[i].results[j].id === value) {
+      if (localStorageData[i].results[j][datakey] === value) {
         valueFound = true
         return localStorageData[i].results[j]
       }
@@ -55,14 +55,29 @@ export const getDesiredData = (datakey, value) => {
     }
   }
 }
-
-// return localStorageData.map((obj) => {
-//   return obj.results.filter((obj) => obj[datakey] === value)
-// })
-
 export const getfilterData = (dataKey, value) => {
   return new Promise((resolve, reject) => {
     let response = getDesiredData(dataKey, value)
+    resolve(response)
+  })
+}
+
+export const getAllReommendations = (dataKey, value) => {
+  const localStorageData = getFromLocalStorage('autosearch')
+  let result = []
+  for (let i = 0; i < localStorageData.length; i++) {
+    for (let j = 0; j < localStorageData[i].results.length; j++) {
+      if (localStorageData[i].results[j][dataKey] === value) {
+        result.push(localStorageData[i].results[j])
+      }
+    }
+  }
+  return result
+}
+
+export const getRecommendData = (dataKey, value) => {
+  return new Promise((resolve, reject) => {
+    let response = getAllReommendations(dataKey, value)
     resolve(response)
   })
 }
