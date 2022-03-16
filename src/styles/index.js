@@ -112,7 +112,7 @@ export const EpisodeContainer = styled(SearchContentContainer)`
   overflow-y: auto;
   max-height: 35em;
   height: 100%;
-  background-color: #e6e7e7;
+  background-color: #99599d;
 `
 export const CardContainer = styled(CharacterShowContainer)`
   flex-direction: column;
@@ -137,5 +137,8 @@ export const Heading = styled(Name)`
   justify-content: center;
   text-decoration: underline;
   font-size: 2em;
-  color: #817d7d;
+  color: #000;
+`
+export const RecommendContainer = styled(EpisodeContainer)`
+  background-color: #fdc9c9;
 `

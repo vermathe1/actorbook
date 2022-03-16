@@ -1,6 +1,6 @@
 import React from 'react'
 import { RecommendCard } from '../../molecules/recommendCard'
-import { EpisodeContainer, Heading } from '../../styles'
+import { RecommendContainer, Heading } from '../../styles'
 
 import { useRecommendations } from './useRecommenations'
 
@@ -11,12 +11,12 @@ export const Recommendataion = (props) => {
   return (
     <>
       <Heading>Recommendations Based on Chosen Species:</Heading>
-      <EpisodeContainer>
+      <RecommendContainer>
         {recommendInfo &&
           recommendInfo.map((info, index) => {
             return <RecommendCard key={index} info={info} onClick={onClick} />
           })}
-      </EpisodeContainer>
+      </RecommendContainer>
     </>
   )
 }

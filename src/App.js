@@ -42,7 +42,7 @@ const App = () => {
 
   return (
     <>
-      {loading && <Loading loading={true} size={20} color="#000" />}
+      {loading && <Loading loading={true} size={100} color="#99599d" />}
       {!loading && <SearchBar onClick={onAutoSearchClick} />}
       {actorInfo && <Episodes info={actorInfo} />}
       {actorInfo && (
