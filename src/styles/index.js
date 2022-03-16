@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
-export const AppContainer = styled.div`
+export const AutoSearchContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 8em;
@@ -105,4 +105,25 @@ export const WarningMessage = styled.span`
   display: flex;
   align-self: center;
   justify-self: center;
+`
+export const EpisodeContainer = styled(SearchContentContainer)`
+  flex-direction: row;
+  flex-wrap: wrap;
+`
+export const CardContainer = styled(CharacterShowContainer)`
+  flex-direction: column;
+`
+export const Name = styled.h3`
+  font-size: 15px;
+  color: #000;
+  margin-left: 10px;
+  flex: 2;
+  display: flex;
+`
+
+export const Species = styled.span`
+  color: #a1a1a1;
+  font-size: 16px;
+  display: flex;
+  flex: 0.2;
 `

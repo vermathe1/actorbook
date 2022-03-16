@@ -41,6 +41,32 @@ export const filterbyCategory = (data, type, searchQuery = '') => {
   })
 }
 
+export const getDesiredData = (datakey, value) => {
+  const localStorageData = getFromLocalStorage('autosearch')
+  let valueFound = false
+  for (let i = 0; i < localStorageData.length; i++) {
+    if (valueFound) break
+    for (let j = 0; j < localStorageData[i].results.length; j++) {
+      if (localStorageData[i].results[j].id === value) {
+        valueFound = true
+        return localStorageData[i].results[j]
+      }
+      if (valueFound) break
+    }
+  }
+}
+
+// return localStorageData.map((obj) => {
+//   return obj.results.filter((obj) => obj[datakey] === value)
+// })
+
+export const getfilterData = (dataKey, value) => {
+  return new Promise((resolve, reject) => {
+    let response = getDesiredData(dataKey, value)
+    resolve(response)
+  })
+}
+
 export const getAllData = async () => {
   const urlForPages = config.baseUrl + config.characters
   const options = preparaAPIQuery('GET', urlForPages)

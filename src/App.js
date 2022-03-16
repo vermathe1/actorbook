@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AppContainer } from './styles'
+import { AppContainer, AutoSearchContainer } from './styles'
 import { SearchBar } from './components/searchbar'
 import {
   getAllData,
@@ -7,6 +7,7 @@ import {
   saveToLocalStorage,
 } from './utils/index'
 import { Loading } from './atoms/loading'
+import { Episodes } from './components/episodes'
 
 const App = () => {
   const initialStorage = () =>
@@ -14,6 +15,7 @@ const App = () => {
   const [actorsinLocalStorage, setActorsinLocalStorage] =
     useState(initialStorage)
   const [loading, setLoading] = useState(true)
+  const [actorInfo, setactorInfo] = useState()
 
   const saveCharactersToLocalStorage = async () => {
     getAllData()
@@ -23,9 +25,14 @@ const App = () => {
       })
       .catch((err) => console.log('error in App Component', err))
   }
+  const onAutoSearchClick = (actorsdetails) => {
+    const { id, species, name, image } = { ...actorsdetails }
+    setactorInfo({ id, species, name, image })
+  }
 
   useEffect(() => {
     if (actorsinLocalStorage.length) {
+      console.log('come here once')
       saveToLocalStorage('autosearch', actorsinLocalStorage)
       setLoading(false)
     } else {
@@ -36,7 +43,8 @@ const App = () => {
   return (
     <>
       {loading && <Loading loading={true} size={20} color="#000" />}
-      <AppContainer>{!loading && <SearchBar />}</AppContainer>
+      {!loading && <SearchBar onClick={onAutoSearchClick} />}
+      {actorInfo && <Episodes info={actorInfo} />}
     </>
   )
 }
