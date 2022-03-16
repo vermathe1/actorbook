@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useClickOutside } from 'react-click-outside-hook'
 import { useDebounce } from '../../utils'
-import { filterbyCategory } from '../../utils/index'
+import { filterbyCategory, getFromLocalStorage } from '../../utils/index'
 
 export const useSearchbar = () => {
   const [isExpanded, setExpanded] = useState(false)
@@ -44,7 +44,7 @@ export const useSearchbar = () => {
   const containerTransition = { type: 'spring', damping: 22, stiffness: 150 }
 
   const showAutoCompleteResult = () => {
-    const data = JSON.parse(window.localStorage.getItem('autosearch'))
+    const data = getFromLocalStorage('autosearch')
     Promise.all(
       data.map((actorinfo) => filterbyCategory(actorinfo, 'name', searchQuery))
     )

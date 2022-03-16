@@ -100,3 +100,10 @@ export const getEpisodeListBasedonIds = async (params) => {
     .then((data) => Promise.resolve(data))
     .catch((err) => console.log('error in getEpisodeListBasedonIds', err))
 }
+
+export const saveToLocalStorage = (key, value) => {
+  window.localStorage.setItem(key, JSON.stringify(value))
+}
+
+export const getFromLocalStorage = (key) =>
+  JSON.parse(window.localStorage.getItem(key))
