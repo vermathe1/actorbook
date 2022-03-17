@@ -1,55 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { SearchBar } from './components/searchbar'
-import {
-  getAllData,
-  getEpisodeListBasedonIds,
-  saveToLocalStorage,
-} from './utils/index'
-import { Loading } from './atoms/loading'
-import { Episodes } from './components/episodes'
-import { Recommendataion } from './components/recommendation'
+import React from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { HomePage } from './pages/HomePage'
 
-const App = () => {
-  const initialStorage = () =>
-    JSON.parse(window.localStorage.getItem('autosearch')) || []
-  const [actorsinLocalStorage, setActorsinLocalStorage] =
-    useState(initialStorage)
-  const [loading, setLoading] = useState(true)
-  const [actorInfo, setactorInfo] = useState()
-
-  const saveCharactersToLocalStorage = async () => {
-    getAllData()
-      .then(async (data) => {
-        const actorsWithEpisodeInfo = await getEpisodeListBasedonIds(data)
-        setActorsinLocalStorage(actorsWithEpisodeInfo)
-      })
-      .catch((err) => console.log('error in App Component', err))
-  }
-  const onAutoSearchClick = (actorsdetails) => {
-    const { id, species, name, image } = { ...actorsdetails }
-    setactorInfo({ id, species, name, image })
-  }
-
-  useEffect(() => {
-    if (actorsinLocalStorage.length) {
-      console.log('come here once')
-      saveToLocalStorage('autosearch', actorsinLocalStorage)
-      setLoading(false)
-    } else {
-      saveCharactersToLocalStorage()
-    }
-  }, [actorsinLocalStorage])
-
+export const App = () => {
   return (
-    <>
-      {loading && <Loading loading={true} size={100} color="#99599d" />}
-      {!loading && <SearchBar onClick={onAutoSearchClick} />}
-      {actorInfo && <Episodes info={actorInfo} />}
-      {actorInfo && (
-        <Recommendataion info={actorInfo} onClick={onAutoSearchClick} />
-      )}
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+    </Router>
   )
 }
-
-export default App

@@ -90,6 +90,7 @@ export const Thumbnail = styled.div`
   img {
     width: auto;
     height: 100%;
+    border-radius: 100%;
   }
 `
 export const CharacterShowContainer = styled.div`
@@ -112,7 +113,7 @@ export const EpisodeContainer = styled(SearchContentContainer)`
   overflow-y: auto;
   max-height: 35em;
   height: 100%;
-  background-color: #99599d;
+  background-color: #e5e5e5;
 `
 export const CardContainer = styled(CharacterShowContainer)`
   flex-direction: column;
@@ -140,6 +141,6 @@ export const Heading = styled(Name)`
   color: #000;
 `
 export const RecommendContainer = styled(EpisodeContainer)`
-  background-color: #fdc9c9;
+  background-color: #e7dcdc;
   height: 100%;
 `
