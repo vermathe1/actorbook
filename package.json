@@ -1,5 +1,5 @@
 {
-  "name": "actorsearch",
+  "name": "actorbook",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,7 +13,7 @@
     "url": "git+https://github.com/vermathe1/actorbook.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Pramod",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/vermathe1/actorbook/issues"
